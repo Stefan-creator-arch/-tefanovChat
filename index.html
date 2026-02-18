@@ -11,10 +11,10 @@
         .admin-btns { display: flex; justify-content: center; gap: 10px; padding: 5px; background: #f0f2f5; }
         .btn-small { background: #e4e6eb; border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.7em; cursor: pointer; font-weight: bold; }
         #chat-okno { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background-color: #e5ddd5; }
-        .sprava { max-width: 75%; padding: 10px 14px; border-radius: 20px; font-size: 0.95em; box-shadow: 0 1px 2px rgba(0,0,0,0.1); position: relative; }
+        .sprava { max-width: 75%; padding: 10px 14px; border-radius: 20px; font-size: 0.95em; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
         .odoslana { background-color: var(--my-msg); align-self: flex-end; color: white; border-bottom-right-radius: 4px; }
         .prijata { background-color: var(--other-msg); align-self: flex-start; color: black; border-bottom-left-radius: 4px; }
-        .chat-img { max-width: 100%; border-radius: 10px; margin-top: 5px; display: block; cursor: pointer; }
+        .chat-img { max-width: 100%; border-radius: 10px; margin-top: 5px; display: block; }
         .pisanielista { background-color: white; padding: 12px; display: flex; gap: 10px; align-items: center; border-top: 1px solid #ddd; }
         input[type="text"] { flex: 1; padding: 12px 18px; border-radius: 25px; border: 1px solid #ccd0d5; outline: none; }
         .btn-icon { background: none; border: none; font-size: 1.5em; cursor: pointer; }
@@ -65,9 +65,7 @@
                 await uploadBytes(storageRef, subor);
                 const url = await getDownloadURL(storageRef);
                 await addDoc(spravyRef, { image: url, cas: Date.now(), autor: menoUzivatela });
-            } catch (e) { 
-                alert("Chyba! Musíš v konzole aktivovať Blaze plan."); 
-            }
+            } catch (e) { alert("Chyba! Musíš v konzole aktivovať Blaze plan."); }
             document.getElementById('loading-overlay').style.display = 'none';
         };
 
@@ -86,7 +84,7 @@
                 const data = doc.data();
                 const div = document.createElement('div');
                 div.classList.add('sprava', data.autor === menoUzivatela ? 'odoslana' : 'prijata');
-                div.innerHTML = data.image ? `<img src="${data.image}" class="chat-img" onclick="window.open('${data.image}')">` : data.text;
+                div.innerHTML = data.image ? `<img src="${data.image}" class="chat-img">` : data.text;
                 okno.appendChild(div);
             });
             okno.scrollTop = okno.scrollHeight;
