@@ -124,6 +124,52 @@
         });
 
         window.vymazatVsetko = async () => { if(confirm("Vymazať celý chat?")) { (await getDocs(spravyRef)).forEach(d => deleteDoc(doc(db, "spravy", d.id))); } };
-    </script>
+    </script><script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"></script>
+
+<script>
+  // Tvoja overená konfigurácia pre "Messenger web"
+  const firebaseConfig = {
+    apiKey: "AIzaSyAdhUjoq7szgFbp8WN5bTKx3...", // Doplň svoje celé API Key
+    authDomain: "stefanov-chat.firebaseapp.com",
+    projectId: "stefanov-chat",
+    storageBucket: "stefanov-chat.firebasestorage.app",
+    messagingSenderId: "915409159507",
+    appId: "1:915409159507:web:6150b7b7b91e665d68cda6"
+  };
+
+  // Inicializácia
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+
+  // 1. Registrácia tvojho Service Workera
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/firebase-messaging-sw.js')
+      .then((reg) => {
+        console.log('Service Worker zaregistrovaný pre Stefanov Messenger!', reg.scope);
+      })
+      .catch((err) => console.log('Chyba registrácie SW:', err));
+  }
+
+  // 2. Funkcia na vyžiadanie povolenia (zobrazí vyskakovacie okno)
+  async function aktivujUpozornenia() {
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        console.log('Povolenie udelené.');
+        
+        // Získanie tokenu (Tu budeš potrebovať ten VAPID kľúč neskôr)
+        // const token = await messaging.getToken({ vapidKey: 'TU_BUDE_KLUC' });
+        // if (token) console.log('Token:', token);
+      }
+    } catch (error) {
+      console.error('Chyba pri povolení:', error);
+    }
+  }
+
+  // Spustiť pri načítaní
+  aktivujUpozornenia();
+</script>
+
 </body>
 </html>
